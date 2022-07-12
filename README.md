@@ -1,4 +1,4 @@
-<p align="center"><a href="#" ><img src="iteba_dev_community.png" width="400"></a></p>
+<p align="center"><a href="#" ><img src="Iteba_dev_community.png" width="400"></a></p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
