@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('user_active', function (Blueprint $table) {
             $table->id();
             $table->string('nim');
-            $table->string('name');
+            $table->string('username');
             $table->string('api_token');
             $table->dateTime('expires_at')->nullable();
             $table->foreign('nim')->references('nim')->on('users');

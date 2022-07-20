@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\testTokenController;
@@ -19,4 +20,5 @@ use App\Http\Controllers\testTokenController;
 Route::middleware('auth:api')->group(function(){
     Route::get('/user', [testTokenController::class, 'data']);
 });
-Route::post('/testToken', [testTokenController::class,'index']);
+
+Route::post('/login', [LoginController::class, 'login']);

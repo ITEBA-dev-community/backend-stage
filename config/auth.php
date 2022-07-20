@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
 
@@ -41,9 +41,9 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'driver' => 'api_token', // pi_token is the name of field in user_active table, extended with Auth in AuthServiceProvider
         ]
+        
     ],
 
     /*
@@ -67,10 +67,6 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
-        ],
-        'user_active' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\user_active::class,
         ],
 
         // 'users' => [

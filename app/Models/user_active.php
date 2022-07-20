@@ -9,5 +9,10 @@ class user_active extends Model
 {
     use HasFactory;
     protected $table = 'user_active';
-    protected $fillable = ['nim','api_token'];
+    protected $guarded = ['id'];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'nim', 'nim');
+    }
 }

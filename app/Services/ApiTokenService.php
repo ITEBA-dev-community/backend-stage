@@ -4,9 +4,10 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\user_active;
+use App\Guard\ApiTokenGuard;
 
 class ApiTokenService
-{
+{    
     private $first_key = 'mvn12903IASJnsadjf72Nldsadl';
     private $second_key = 'Kjaklsdf89we12erQW9UDsadjwjfsdad9wersdf/qwefw2qwe';
     private $iv = '0o9i8u7y6tlkJHGF';
