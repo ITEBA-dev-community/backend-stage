@@ -4,8 +4,6 @@ namespace App\Extension;
 
 use App\Models\User;
 use App\Models\user_active;
-use Illuminate\Support\Str;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Auth\Authenticatable as Auth;
 
@@ -20,17 +18,24 @@ class TokenUserProvider implements UserProvider
 		$this->user_active = $user_active;
 	}
 
-	public function retrieveById($identifier): bool
+	public function retrieveById($identifier)
     {
 		// in case if we want to use the nim as indetifier, just implement this method on apitokenguard
-		return $this->user->where('nim',$identifier);
+		$user = $this->user_active->where('nim',$identifier)->first();
+		if($user){
+			$user->nim;
+		} 
+			
+		return $user ?? false;
 	}
 
 	public function retrieveByToken($field, $value)
     {
 		// this function is for validate the user token and function is called from ApiTokenGuard func user()
-		$token = $this->user_active->with('users')->where($field, $value)->first();
-		
+		$token = $this->user_active->with('users')
+		->where($field[0], $value['api_token'])
+		->where($field[1], $value['nim'])->first();
+
 		return $token ? $token  : null;
 	}
 
@@ -41,15 +46,16 @@ class TokenUserProvider implements UserProvider
 
 	public function retrieveByCredentials(array $credentials)
 	{ 
-		// This function is for validation from the login form, we can use this function to validate the user login
-		// find the user data at user table
+		// This function is for validation the credentials, used by apitokenguard
+		//  we can use this function to validate the user login
 		
 		$user = $this->user;
-
+		// find the user data at user table
 		if(!is_null($credentials['nim']) && !is_null($credentials['username'])){
-			$user->where('nim', $credentials['nim'])
-			->where('username', $credentials['username']);
-			return $user->first();
+			$user = $user->where('nim', $credentials['nim'])
+			->where('username', $credentials['username'])
+			->first();
+			return $user;
 		}
 
 		return false;

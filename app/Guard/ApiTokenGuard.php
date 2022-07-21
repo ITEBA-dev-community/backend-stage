@@ -13,8 +13,9 @@ class ApiTokenGuard implements Guard
     use GuardHelpers;
 
 	private $inputKey = '';
-	private $field_key = '';
+	private $field_key = [];
 	private $request;
+	private $nim = 'user_active_id';
 
 	public function __construct (TokenUserProvider $TokenUserProvider,Request $request, $configuration) 
     {
@@ -24,7 +25,7 @@ class ApiTokenGuard implements Guard
 		// if the configuration is not empty, we will set the input key and field key
 		// but if empty we will use the default api_token
 		$this->inputKey = isset($configuration['input_key']) ? $configuration['input_key'] : 'api_token';
-		$this->field_key = isset($configuration['storage_key']) ? $configuration['storage_key'] : 'api_token';
+		$this->field_key = ['api_token','nim'];
 	}
 
 	public function user(): ?object
@@ -35,14 +36,15 @@ class ApiTokenGuard implements Guard
 
 		$user = null;
 
-		// cek token input from header or request or query param, **for now we will use header to pass the token
-		$token = $this->getTokenForRequest();
-
-		if (!empty($token)) {
-            // check the token in user_active table is valid or not
-			$user = $this->provider->retrieveByToken($this->field_key, $token);
+		$value =[];
+		// cek token input from header or request or query param, **for now we will use header and body nim to pass the token
+		$value['api_token'] = $this->getTokenForRequest();
+		$value['nim'] = $this->provider->retrieveById($this->request->header($this->nim));
+		
+		if($value['nim'] && !empty($value['api_token'])){
+			// check the token in user_active table is valid or not
+			$user = $this->provider->retrieveByToken($this->field_key, $value);
 		}
-	
 		return $this->user = $user;
 	}
 
@@ -73,17 +75,9 @@ class ApiTokenGuard implements Guard
 		// }
 
         // validate user datas from user table
-		$data = [
-            'nim' => $credentials['nim'],
-            'username' => $credentials['username'],
-            'password' => $credentials['password'],
-        ];
-
-		if ($this->provider->retrieveByCredentials($data)) {
-
-			$user = $this->provider->retrieveByCredentials($data);
-
-			return $this->provider->validateCredentials($user, $data);
+		$user = $this->provider->retrieveByCredentials($credentials);
+		if($user){
+			return $this->provider->validateCredentials($user, $credentials);
 		}
 
 		return false;

@@ -18,4 +18,12 @@ class Authenticate extends Middleware
             return route('login');
         }
     }
+
+    protected function unauthenticated($request, array $guards)
+    {
+        abort(response()->json([
+            'status' => 401,
+            'message' => 'Maaf Token dengan user id tersebut tidak valid',
+        ], 401));
+    }
 }

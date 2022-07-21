@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'nim' => 'required',
+            'nim' => 'required|exists:users,nim',
             'username' => 'required',
             'password' => 'required',
         ];
@@ -24,10 +26,17 @@ class LoginRequest extends FormRequest
     {
         return [
             'nim.required' => 'Nim tidak boleh kosong',
-            'username.required' => 'Username tidak boleh kosong',
-            'password.required' => 'Password tidak boleh kosong',
+            'nim.exists' => 'Nim tidak ditemukan',
+            'username.required' => 'Username Tidak Boleh Kosong',
+            'password.required' => 'Password Tidak Boleh Kosong',
         ];
     }
 
-   
+    protected function failedValidation(Validator $validator) 
+    { 
+        throw new HttpResponseException(response()->json([
+            'status' => 400,
+            'message' => $validator->errors()
+        ], 400));
+    }
 }

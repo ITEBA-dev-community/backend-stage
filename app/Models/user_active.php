@@ -15,4 +15,10 @@ class user_active extends Model
     {
         return $this->belongsTo(User::class, 'nim', 'nim');
     }
+
+    public function scopeCheckToken($query, $token)
+    {
+        $token = explode(' ', $token);
+        return $query->where('api_token', $token[1]);
+    }
 }

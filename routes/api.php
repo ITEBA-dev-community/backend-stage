@@ -18,7 +18,9 @@ use App\Http\Controllers\testTokenController;
 
 
 Route::middleware('auth:api')->group(function(){
-    Route::get('/user', [testTokenController::class, 'data']);
+    // Route After Login
+    
+
 });
 
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login'])->middleware('check.token');

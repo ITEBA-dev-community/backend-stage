@@ -18,25 +18,22 @@ class LoginController extends Controller
     
     public function login(LoginRequest $request)
     {
-
+        // auth validate going to ApiTokenGuard
         if(Auth::validate(['nim' => $request->nim,'username' => $request->username, 'password' => $request->password])){
             
-            $token = $this->TokenService->getToken($request->nim,$request->username);
-            user_active::create([
-                'nim' => $request->nim,
-                'username' => $request->username,
-                'api_token' => $token
-            ]);
+            $token = $this->TokenService->getActiveToken($request->nim,$request->username);
+
             return response()->json([
-                'status' => 'success',
-                'message' => 'berhasil login',
+                'status' => 200,
+                'message' => 'Berhasil login',
                 'token' => $token
             ], 200);
         }
 
         return response()->json([
             'status' => 400,
-            'message' => 'Gagal Login'
-        ]);
+            'message' => 'Gagal Login, Credentials Tidak Valid'
+        ],400);
     } 
+
 }
