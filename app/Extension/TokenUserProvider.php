@@ -23,10 +23,10 @@ class TokenUserProvider implements UserProvider
 		// in case if we want to use the nim as indetifier, just implement this method on apitokenguard
 		$user = $this->user_active->where('nim',$identifier)->first();
 		if($user){
-			$user->nim;
+			return $user->nim;
 		} 
-			
-		return $user ?? false;
+		
+		return null;
 	}
 
 	public function retrieveByToken($field, $value)

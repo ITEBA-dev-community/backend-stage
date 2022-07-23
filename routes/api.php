@@ -19,7 +19,7 @@ use App\Http\Controllers\testTokenController;
 
 Route::middleware('auth:api')->group(function(){
     // Route After Login
-    
+    Route::post('/logout', [LoginController::class, 'logout']);
 
 });
 

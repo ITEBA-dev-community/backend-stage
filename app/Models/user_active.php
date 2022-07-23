@@ -21,4 +21,9 @@ class user_active extends Model
         $token = explode(' ', $token);
         return $query->where('api_token', $token[1]);
     }
+
+    public static function deleteToken($nim)
+    {
+        user_active::where('nim', $nim)->delete();
+    }
 }

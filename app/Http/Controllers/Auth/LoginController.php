@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\ApiTokenService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
+use App\Models\user_active;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -35,5 +36,15 @@ class LoginController extends Controller
             'message' => 'Gagal Login, Credentials Tidak Valid'
         ],400);
     } 
+
+    public function logout()
+    {
+        $nim = request()->header('user_active_id');
+        user_active::deleteToken($nim);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil Logout'
+        ],200);
+    }
 
 }
