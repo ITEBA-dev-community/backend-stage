@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 use App\Services\ApiTokenService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\user_active;
 
 class LoginController extends Controller
 {
@@ -22,10 +21,11 @@ class LoginController extends Controller
         if(Auth::validate(['nim' => $request->nim,'username' => $request->username, 'password' => $request->password])){
             
             $token = $this->TokenService->getActiveToken($request->nim,$request->username);
-
+            $user =  User::where('nim', $request->nim)->first(['nim','username','email']);
             return response()->json([
                 'status' => 200,
                 'message' => 'Berhasil login',
+                'data' => $user,
                 'token' => $token
             ], 200);
         }

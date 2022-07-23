@@ -21,14 +21,14 @@ class ApiTokenService
         $data = base64_encode($rand.$nim.$username);
         $token = $this->SafeToken($data);
 
-        $data = user_active::create([
+        $token_id = user_active::create([
             'nim' => $nim,
             'username' => $username,
             'api_token' => $token
         ])->id;
         
         // id Token + User Nim + The Active Token
-        return $data.'|'.$nim.'|'.$token;
+        return $token_id.'|'.$nim.'|'.$token;
     }
 
     public function SafeToken(string $data): string
