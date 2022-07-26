@@ -19,8 +19,10 @@ use App\Http\Controllers\testTokenController;
 
 Route::middleware('auth:api')->group(function(){
     // Route After Login
-    
+
 
 });
 
 Route::post('/login', [LoginController::class, 'login'])->middleware('check.token');
+Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
+
