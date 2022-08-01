@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\testTokenController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Api\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +22,8 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 
-Route::post('/login', [LoginController::class, 'login'])->middleware('check.token');
-Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
+Route::middleware('check.token')->group(function() {
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/register', [RegisterController::class]);
+});
 
